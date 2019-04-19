@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import TodoItem from './Todoitem'
-import Test from './Test';
 import './style.css'
 
 class Todolist extends Component{
@@ -16,7 +15,13 @@ class Todolist extends Component{
         this.handleItemDelete = this.handleItemDelete.bind(this)
     }
 
+    //在组件即将被挂载到页面的时刻自动执行
+    componentWillMount(){
+        console.log('componentWillMount');
+    }
+
     render(){
+        console.log('render')
         return(
             <Fragment>
                 <div>
@@ -27,16 +32,40 @@ class Todolist extends Component{
                     className='input'
                     value={this.state.inputValue} 
                     onChange={this.handleInputChange}//监听事件改变
-                    
+                    ref={(input) => {this.input=input}}
                     />
                     <button onClick={this.handleBtnClick}>Submit</button></div>
-                <ul>
+                <ul ref={(ul)=> {this.ul=ul}}> 
                     {this.getTodoItem()}
                 </ul>
-                <Test content={this.state.inputValue}/>
             </Fragment>
         )
     }
+
+
+    //组件被挂载之后自动执行
+    componentDidMount(){
+        console.log('componentDidMount');
+    }
+
+    //组件被更新之前，他会自动被执行
+    shouldComponentUpdate(){
+        console.log('shouldComponentUpdate');
+        return true;
+    }
+
+    //组建被更新之前，它会自动执行，但是它在shouldComponentUpdate之后执行，是否执行取决于返回结果
+    componentWillUpdate(){
+        console.log('ComponentWillUpdate');
+    
+    }
+
+    //组件更新完成之后会被执行
+    componentDidUpdate(){
+        console.log('ComponentDidUpdate');
+    
+    }
+
 
     getTodoItem(){
         return this.state.list.map((item,index) =>{
@@ -56,7 +85,8 @@ class Todolist extends Component{
     }
 
     handleInputChange(e){
-        const value = e.target.value;
+        
+        const value = this.input.value;
         this.setState(() => ({
             inputValue: value
             }));
@@ -66,7 +96,10 @@ class Todolist extends Component{
         this.setState((prevState) =>({
             list: [...prevState.list, prevState.inputValue],
             inputValue: ''
-        }));       
+        }),() =>{
+            console.log(this.ul.querySelectorAll('div').length);  
+        });  
+          
     }
 
     handleItemDelete(index){
