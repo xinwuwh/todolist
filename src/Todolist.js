@@ -16,7 +16,7 @@ class Todolist extends Component {
         return (
             <div style={{marginTop: '10px', marginLeft:'10px'}}>
                 <div> 
-                    <Input value={this.state.value} placeholder='todo info' style={{width: '300px', marginRight:'10px'}}/>
+                    <Input value={this.state.inputValue} placeholder='todo info' style={{width: '300px', marginRight:'10px'}}/>
                     <Button type="primary">Submit</Button>
                 </div>
                 <List
