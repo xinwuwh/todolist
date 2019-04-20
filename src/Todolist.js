@@ -9,6 +9,10 @@ class Todolist extends Component {
     constructor(props){
         super(props);
         this.state= store.getState();
+        this.handleInputChange= this.handleInputChange.bind(this);
+        this.handleStoreChange= this.handleStoreChange.bind(this);
+        this.handleBtnClick=this.handleBtnClick.bind(this);
+        store.subscribe(this.handleStoreChange);
         //console.log(this.state());
     }
 
@@ -16,8 +20,13 @@ class Todolist extends Component {
         return (
             <div style={{marginTop: '10px', marginLeft:'10px'}}>
                 <div> 
-                    <Input value={this.state.inputValue} placeholder='todo info' style={{width: '300px', marginRight:'10px'}}/>
-                    <Button type="primary">Submit</Button>
+                    <Input 
+                    value={this.state.inputValue} 
+                    placeholder='todo info' 
+                    style={{width: '300px', marginRight:'10px'}}
+                    onChange={this.handleInputChange}
+                    />
+                    <Button type="primary" onClick={this.handleBtnClick}>Submit</Button>
                 </div>
                 <List
                     style={{marginTop: '10px', width: '300px'}}
@@ -29,6 +38,25 @@ class Todolist extends Component {
         
 
         )
+    }
+
+    handleInputChange(e){
+        const action ={
+            type: 'change_input_value',
+            value: e.target.value
+        }
+        store.dispatch(action);
+    }
+
+    handleStoreChange(){
+        this.setState(store.getState());
+    }
+
+    handleBtnClick(){
+        const action ={
+            type: 'add_todo_item'
+        };
+        store.dispatch(action);
     }
 }
 export default Todolist;
