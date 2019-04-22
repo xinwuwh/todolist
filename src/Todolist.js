@@ -1,36 +1,33 @@
-import React, {Component } from 'react';
-import store from './store';
+import React from 'react';
+//import store from './store';
 import {connect} from 'react-redux';
 
-class Todolist extends Component {
-    constructor(props){
-        super(props);
-        this.state = store.getState();
-        //this.handleInputChange= this.handleInputChange.bind(this)
-        //this.handleClick=this.handleClick.bind(this)
-    }
+const Todolist = (props)=>{
+    const {inputValue,changeInputValue,handleClick,list,handleDelete}= props;
 
-
-    render(){
         return(
             <div>
                 <div>
-                    <input value={this.props.inputValue} onChange={this.props.changeInputValue}/>
-                    <button >submit</button>
+                    <input value={inputValue} onChange={changeInputValue}/>
+                    <button onClick={handleClick}>submit</button>
                 </div>
                 <ul>
-                    <li>dell</li>
+                    {list.map((item,index)=>{
+                        return <li onClick={handleDelete} key={index}>{item}</li>
+                    })
+                }
                 </ul>
             </div>
         )
-
-    }
-
+    
 }
+
+
 
 const mapStateToProps=(state) =>{
     return {
-        inputValue: state.inputValue
+        inputValue: state.inputValue,
+        list: state.list
 
     }
 }
@@ -44,6 +41,22 @@ const mapDispatchToProps=(dispatch) =>{
                 value: e.target.value
             }
             dispatch(action);
+        },
+
+        handleClick(){
+            const action={
+                type: 'add_item'
+            }
+            dispatch(action);
+        },
+
+        handleDelete(index){
+            const action={
+                type: 'handle_delete',
+                value: index
+            }
+            dispatch(action);
+
         }
         
 
